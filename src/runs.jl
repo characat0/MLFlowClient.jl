@@ -20,7 +20,7 @@ function createrun(mlf::MLFlow, experiment_id; run_name=missing, start_time=miss
     if ismissing(start_time)
         start_time = Int(trunc(datetime2unix(now(UTC)) * 1000))
     end
-    result = mlfpost(mlf, endpoint; experiment_id=experiment_id, run_name=run_name, start_time=start_time, tags=tags)
+    result = mlfpost(mlf, endpoint; experiment_id=string(experiment_id), run_name=run_name, start_time=start_time, tags=tags)
     MLFlowRun(result["run"]["info"], result["run"]["data"])
 end
 """
