@@ -26,7 +26,7 @@ function mlfpost(mlf, endpoint; kwargs...)
     body = JSON.json(kwargs)
 
     try
-        response = HTTP.post(apiuri, apiheaders, body)
+        response = HTTP.post(apiuri, apiheaders, body; retry_non_idempotent=true)
         return JSON.parse(String(response.body))
     catch e
         throw(e)
@@ -48,7 +48,7 @@ function mlfput_artifact(mlf, artifact_uri, filename, data)
     apiuri = URI("$(mlf.apiroot)/$(mlf.apiversion)/mlflow-artifacts/artifacts/$(artifact_path)/$(filename)")
     apiheaders = headers(mlf, Dict("Content-Type" => content_type))
     try
-        response = HTTP.put(apiuri, apiheaders, data)
+        response = HTTP.put(apiuri, apiheaders, data; retry_non_idempotent=true)
         return JSON.parse(String(response.body))
     catch e
         throw(e)
