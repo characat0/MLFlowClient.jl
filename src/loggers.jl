@@ -62,6 +62,15 @@ function logmetric(mlf::MLFlow, run::Union{String,MLFlowRun,MLFlowRunInfo}, key,
 end
 
 
+function logmetrics(mlf::MLFlow, run_id::String, metrics; timestamp=missing, step=missing)
+    endpoint = "runs/log-batch"
+    if ismissing(timestamp)
+        timestamp = Int(trunc(datetime2unix(now(UTC)) * 1000))
+    end
+    metrics_list = [Dict(:key => k, :value => v, :timestamp => timestamp, :step => step) for (k, v) in metrics]
+    mlfpost(mlf, endpoint; run_id, metrics=metrics_list)
+end
+
 """
     logartifact(mlf::MLFlow, run, basefilename, data)
 
